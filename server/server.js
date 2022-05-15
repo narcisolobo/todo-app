@@ -1,7 +1,8 @@
 const express = require('express');
-const dotenv = require('dotenv').config();
+const dotenv = require('dotenv');
 const colors = require('colors');
 const connectDb = require('./config/mongoose.config');
+dotenv.config();
 connectDb();
 
 const app = express();
