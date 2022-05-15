@@ -1,6 +1,11 @@
 const express = require('express');
 const dotenv = require('dotenv').config();
+const colors = require('colors');
+const connectDb = require('./config/mongoose.config');
+connectDb();
+
 const app = express();
+
 const todoRouter = require('./routes/todo.routes');
 
 app.use(express.json(), express.urlencoded({ extended: true }));

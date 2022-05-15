@@ -1,4 +1,5 @@
 const asyncHandler = require('express-async-handler');
+const Todo = require('../models/todo.model');
 
 /* 
   @desc:    fetch todos
@@ -6,10 +7,9 @@ const asyncHandler = require('express-async-handler');
   @access:  Private
 */
 const fetchTodos = asyncHandler(async (req, res) => {
-  res.status(200).json({
-    msg: 'all todos'
-  });
-})
+  const todos = await Todo.find();
+  res.status(200).json(todos);
+});
 
 /* 
   @desc:    create todo
@@ -17,10 +17,9 @@ const fetchTodos = asyncHandler(async (req, res) => {
   @access:  Private
 */
 const createTodo = asyncHandler(async (req, res) => {
-  res.status(200).json({
-    msg: 'create todo'
-  });
-})
+  const todo = await Todo.create(req.body);
+  res.status(200).json(todo);
+});
 
 /* 
   @desc:    fetch one todo
@@ -28,10 +27,14 @@ const createTodo = asyncHandler(async (req, res) => {
   @access:  Private
 */
 const fetchTodo = asyncHandler(async (req, res) => {
-  res.status(200).json({
-    msg: `fetching post ${req.params.id}`
-  });
-})
+  const todo = await Todo.findById(req.params.id);
+
+  if (!todo) {
+    res.status(400).json({ msg: `Todo not found.` })
+  }
+
+  res.status(200).json(todo);
+});
 
 /* 
   @desc:    update todo
@@ -39,10 +42,19 @@ const fetchTodo = asyncHandler(async (req, res) => {
   @access:  Private
 */
 const updateTodo = asyncHandler(async (req, res) => {
-  res.status(200).json({
-    msg: `updating post ${req.params.id}`
-  });
-})
+  const todo = await Todo.findById(req.params.id);
+
+  if (!todo) {
+    res.status(400).json({ msg: 'todo not found' });
+  }
+
+  const updatedTodo = await Todo.findByIdAndUpdate(
+    req.params.id,
+    req.body,
+    { new: true }
+  )
+  res.status(200).json(updatedTodo);
+});
 
 /* 
   @desc:    delete todo
@@ -50,10 +62,12 @@ const updateTodo = asyncHandler(async (req, res) => {
   @access:  Private
 */
 const deleteTodo = asyncHandler(async (req, res) => {
+  const todo = await Todo.findById(req.params.id);
+  await todo.remove();
   res.status(200).json({
-    msg: `deleting post ${req.params.id}`
+    id: req.params.id
   });
-})
+});
 
 module.exports = {
   fetchTodos,

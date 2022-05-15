@@ -1,9 +1,16 @@
 const mongoose = require('mongoose');
 
-mongoose.connect('mongodb://localhost:27017/todoDb', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
+const connectDb = async () => {
+  try {
+    const connect = await mongoose.connect(process.env.MONGO_URI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true
+    });
+    console.log(`DB HOST: ${connect.connection.host}, DB NAME: ${connect.connection.name}`.cyan.underline);
+  } catch (error) {
+    console.log(error);
+    process.exit(1)
+  }
+}
 
-})
-  .then(() => console.log(`Connected to database: ${mongoose.connection.name}`))
-  .catch(err => console.log('Could not connect to database.', err));
+module.exports = connectDb;
