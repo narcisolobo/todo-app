@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const { protect } = require('../middleware/authMiddleware');
 const {
   fetchTodos,
   createTodo,
@@ -9,12 +10,12 @@ const {
 } = require('../controllers/todo.controller');
 
 router.route('/')
-  .get(fetchTodos)
-  .post(createTodo);
+  .get(protect, fetchTodos)
+  .post(protect, createTodo);
 
 router.route('/:id')
-  .get(fetchTodo)
-  .put(updateTodo)
-  .delete(deleteTodo);
+  .get(protect, fetchTodo)
+  .put(protect, updateTodo)
+  .delete(protect, deleteTodo);
 
 module.exports = router;
