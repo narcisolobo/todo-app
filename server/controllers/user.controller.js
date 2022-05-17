@@ -74,12 +74,7 @@ const loginUser = asyncHandler(async (req, res) => {
   @access:  Private
 */
 const getUser = asyncHandler(async (req, res) => {
-  const { _id, username, email } = await User.findById(req.user.id);
-  res.status(200).json({
-    id: _id,
-    username,
-    email
-  })
+  res.status(200).json(req.user)
 })
 
 const getAllUsers = asyncHandler(async (req, res) => {

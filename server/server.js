@@ -1,6 +1,7 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const colors = require('colors');
+const cors = require('cors');
 const connectDb = require('./config/mongoose.config');
 dotenv.config();
 connectDb();
@@ -10,7 +11,7 @@ const app = express();
 const todoRouter = require('./routes/todo.routes');
 const userRouter = require('./routes/user.routes');
 
-app.use(express.json(), express.urlencoded({ extended: true }));
+app.use(express.json(), express.urlencoded({ extended: true }), cors());
 app.use('/api/todos', todoRouter);
 app.use('/api/users', userRouter);
 
